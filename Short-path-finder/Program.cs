@@ -33,7 +33,7 @@ public class Program
         }
 
         Node startNode = grid[0, 0];       // Top-left corner
-        Node targetNode = grid[5,1];     // Bottom-right corner
+        Node targetNode = grid[1,1];     // Bottom-right corner
 
         List<Node> path = ShortestParhFinder.FindPath(grid, startNode, targetNode);
 

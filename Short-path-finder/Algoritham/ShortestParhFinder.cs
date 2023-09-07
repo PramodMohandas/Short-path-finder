@@ -32,40 +32,49 @@ namespace Short_path_finder.Algoritham
     {
         public static List<Node> FindPath(Node[,] grid, Node startNode, Node targetNode)
         {
+            // This is the collection of node for examination for shortest path
             List<Node> openSet = new List<Node>();
+            // This is the collection of node which are examined and marked as visited
             HashSet<Node> closedSet = new HashSet<Node>();
 
+            //Add the node for examination in openSet
             openSet.Add(startNode);
 
+            //Analyse each node 
             while (openSet.Count > 0)
             {
+                //Set first node as currentNode
                 Node currentNode = openSet[0];
 
                 for (int i = 1; i < openSet.Count; i++)
                 {
+                    //This condition checks for shortest node from openSet to determine the cureentnode to proceed with
                     if (openSet[i].fCost < currentNode.fCost || (openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost))
                     {
                         currentNode = openSet[i];
                     }
                 }
-
+                //Mark the currentNode as its visited by removing it from openSet and add it into closedSet
                 openSet.Remove(currentNode);
                 closedSet.Add(currentNode);
 
+                //if current node is the targetnode then retracepath to return the result of shortest path
                 if (currentNode == targetNode)
                 {
                     return RetracePath(startNode, targetNode);
                 }
-
+                //Find all the available neigbhours of currentnode from grid
                 foreach (Node neighbor in GetNeighbors(grid, currentNode))
                 {
+                    //if neigbhour is not walkable or already visited then skip calcualting gCost and hCost and addition to openSet
                     if (!neighbor.walkable || closedSet.Contains(neighbor))
                     {
                         continue;
                     }
-
+                    //Calculate total cost to reach current neigbhour node from startNode 
                     int newCostToNeighbor = currentNode.gCost + GetDistance(currentNode, neighbor);
 
+                    //if newCostToNeighbor is shorest cost than current gCost current neighbour node then set gCost, hCost and parent , then finally into openSet
                     if (newCostToNeighbor < neighbor.gCost || !openSet.Contains(neighbor))
                     {
                         neighbor.gCost = newCostToNeighbor;
